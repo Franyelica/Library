@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.GenericGenerators;
 
 import java.util.UUID;
@@ -12,8 +13,10 @@ import java.util.UUID;
 public class Autor {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    /*@GeneratedValue(strategy = GenerationType.AUTO)*/
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
+    private String id;
 
     private String nombre;
 
@@ -24,7 +27,7 @@ public class Autor {
     //GETTERS
 
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
@@ -35,11 +38,16 @@ public class Autor {
     //SETTERS
 
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    @Override
+    public String toString() {
+        return "Autor [id=" + id + ", nombre=" + nombre + "]";
     }
 }

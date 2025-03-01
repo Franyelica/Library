@@ -9,9 +9,7 @@ public class Libro {
 
     @Id
     private Long isbn;
-
     private String titulo;
-
     private Integer ejemplares;
 
     @Temporal(TemporalType.DATE)
@@ -72,6 +70,12 @@ public class Libro {
 
     public void setEditorial(Editorial editorial) {
         this.editorial = editorial;
+    }
+
+    @Override
+    public String toString() {
+        return "Libro [isbn=" + isbn + ", titulo=" + titulo + ", ejemplares=" + ejemplares + ", alta=" + alta
+                + ", autor=" + autor + ", editorial=" + editorial + "]";
     }
 
 }

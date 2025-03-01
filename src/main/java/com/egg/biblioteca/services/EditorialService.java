@@ -21,33 +21,34 @@ public class EditorialService {
 
     @Transactional
     public void createEditorial(String nombre) throws MiException{
-        Editorial editorial=new Editorial();
-
-        editorial.setNombre(nombre);
-
-        editorialRepository.save(editorial);
+            validar(nombre);
+            Editorial editorial = new Editorial();
+            editorial.setNombre(nombre);
+            editorialRepository.save(editorial);
     }
 
+    @Transactional
     public List<Editorial> listarEditoriales(){
+
         List <Editorial> editoriales = new ArrayList<>();
         editoriales = editorialRepository.findAll();
         return editoriales;
     }
 
     @Transactional
-    public void modificarEditorial(UUID id, String nombre)throws MiException{
+    public void modificarEditorial(String id, String nombre)throws MiException{
+        validar(nombre);
         Optional<Editorial> respuesta = editorialRepository.findById(id);
 
         if(respuesta.isPresent()){
             Editorial editorial = respuesta.get();
-
             editorial.setNombre(nombre);
-            editorialRepository.save(editorial);
+            /*editorialRepository.save(editorial);*/
         }
     }
 
     private void validar(String nombre) throws MiException {
-        if (nombre.isEmpty() || nombre == null) {
+        if (nombre == null || nombre.isEmpty()) {
             throw new MiException("el nombre no puede ser nulo o estar vacío");
         }
     }

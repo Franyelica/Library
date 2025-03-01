@@ -19,13 +19,13 @@ public class AutorService {
 
     @Transactional
     public void createAutor(String nombre) throws MiException{
+        validar(nombre);
         Autor autor = new Autor();
-
         autor.setNombre(nombre);
-
         autorRepository.save(autor);
     }
 
+    @Transactional
     public List<Autor> listarAutores(){
         List <Autor> autores = new ArrayList<>();
         autores = autorRepository.findAll();
@@ -34,17 +34,17 @@ public class AutorService {
 
     @Transactional
     public void modifyAutor(String nombre, String id) throws MiException{
+        validar(nombre);
         Optional<Autor> answer = autorRepository.findById(id);
         if (answer.isPresent()){
             Autor autor = answer.get();
-
             autor.setNombre(nombre);
             autorRepository.save(autor);
         }
     }
 
     private void validar(String nombre) throws MiException{
-            if (nombre.isEmpty() || nombre == null) {
+            if (nombre == null || nombre.isEmpty()) {
                 throw new MiException("el nombre no puede ser nulo o estar vacío");
             }
         }
