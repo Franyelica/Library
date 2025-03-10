@@ -48,5 +48,10 @@ public class AutorService {
                 throw new MiException("el nombre no puede ser nulo o estar vacío");
             }
         }
+
+    @Transactional
+    public Autor getOne(String id){
+        return autorRepository.getReferenceById(id);
+    }
 }
 

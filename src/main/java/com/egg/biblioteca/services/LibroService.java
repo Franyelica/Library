@@ -73,7 +73,7 @@ public class LibroService {
             libro.setAutor(autor);
             libro.setEditorial(editorial);
 
-            /*libroRepository.save(libro);*/
+            libroRepository.save(libro);
         }
     }
 
@@ -94,4 +94,14 @@ public class LibroService {
             throw new MiException("el isbn no puede ser nulo");
         }
     }
+    /*@Transactional
+    public Autor getOne(String id){
+        return autorRepository.getReferenceById(id);
+    }*/
+
+    @Transactional
+    public Libro getOne(Long isbn){
+        return libroRepository.getReferenceById(isbn);
+    }
+
 }

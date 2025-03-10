@@ -1,16 +1,16 @@
 package com.egg.biblioteca.controller;
 
+import com.egg.biblioteca.entities.Autor;
+import com.egg.biblioteca.entities.Libro;
 import com.egg.biblioteca.exception.MiException;
 import com.egg.biblioteca.services.AutorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,4 +38,30 @@ public class AutorController {
         return "index.html";
     }
 
+    @GetMapping("/lista")
+    public String listar(ModelMap modelo){
+
+        List<Autor> autores = autorService.listarAutores();
+        modelo.addAttribute("autores", autores);
+        return "autor_list.html";
+    }
+
+    @GetMapping("/modificar/{id}")
+    public String modificar(@PathVariable String id, ModelMap modelo){
+        modelo.put("autor", autorService.getOne(id));
+
+        return  "autor_modificar.html";
+    }
+
+    @PostMapping("/modificar/{id}")
+        public String modificar(@PathVariable String id, String nombre, ModelMap modelo) {
+        try {
+            autorService.modifyAutor(nombre, id);
+            modelo.put("exito", "El autor fue modificado exitosamente");
+            return "redirect:../lista";
+        } catch (MiException ex) {
+            modelo.put("error", ex.getMessage());
+            return "autor_modificar.html";
+        }
+    }
 }
