@@ -14,26 +14,29 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class WebSecurity{
 
-
-//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-//        http.authorizeHttpRequests((authorize) -> authorize.requestMatchers("/css/", "/js/", "/img/","/**").
-//                permitAll()).csrf(AbstractHttpConfigurer::disable);
-//        return http.build();
-//    }
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        return http
-                .csrf((csfr)->csfr.disable())
-                .authorizeHttpRequests(
-                        (auth)->{
-                            auth.requestMatchers("/registrar");
-                            auth.requestMatchers("/css/","/js/","/img/","/**").permitAll();
-                            auth.anyRequest().authenticated();
-                        }
+        http
+                .authorizeHttpRequests(auth-> auth
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/css/**","/js/**","/img/**").permitAll()
+                        .requestMatchers("/login","/registrar").permitAll()
+                        .anyRequest().authenticated()
                 )
-                .formLogin((form)->form.permitAll())
-                .build();
+                .formLogin(form->form
+                        .loginPage("/login")
+                        .loginProcessingUrl("/logincheck")
+                        .usernameParameter("email")
+                        .passwordParameter("password")
+                        .defaultSuccessUrl("/inicio", true)
+                         .permitAll())
+                .logout(logout-> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login")
+                        .permitAll()
+                )
+                .csrf(csrf->csrf.disable());
+        return http.build();
     }
 
     @Bean
